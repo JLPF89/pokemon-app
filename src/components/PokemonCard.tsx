@@ -1,4 +1,6 @@
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, Button } from "react-native";
+import EvolutionsModal from "./EvolutionsModal";
+import React, { useState } from "react";
 
 const getTypeDetails = (type) => {
   switch (type.toLowerCase()) {
@@ -22,10 +24,14 @@ export default function PokemonCard({
   hp,
   moves,
   weakness,
-  regions,
   evolutions,
 }) {
   const { borderColor, emoji } = getTypeDetails(type);
+  const [modalVisible, setModalVisible] = useState(false);
+  const handleClickEvolutions = () => {
+    setModalVisible(true);
+  };
+
   return (
     <View style={styles.card}>
       <View style={styles.nameContainer}>
@@ -36,7 +42,7 @@ export default function PokemonCard({
       <Image
         source={image}
         style={styles.image}
-        aria-label={`${name} pokemon`}
+        accessibilityLabel={`${name} pokemon`}
         resizeMode="contain"
       />
 
@@ -53,11 +59,13 @@ export default function PokemonCard({
         <Text>Weakness: {weakness.join(", ")}</Text>
       </View>
       <View>
-        <Text>Regions: {regions.join(", ")}</Text>
+        <Button onPress={() => handleClickEvolutions()} title="Evolutions" />
       </View>
-      <View>
-        <Text>Evolutions: {evolutions.join(", ")}</Text>
-      </View>
+      <EvolutionsModal
+        evolutions={evolutions}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </View>
   );
 }
@@ -66,10 +74,14 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     borderRadius: 16,
+    shadowOpacity: 0.3,
     borderWidth: 2,
     padding: 16,
     margin: 16,
     elevation: 5,
+    shadowOffset: { width: 2, height: 2 },
+    shadowRadius: 4,
+    shadowColor: "#333",
   },
   nameContainer: {
     flexDirection: "row",
@@ -107,5 +119,12 @@ const styles = StyleSheet.create({
   typeText: {
     fontSize: 22,
     fontWeight: "bold",
+  },
+  evolutionsButton: {
+    marginTop: 10,
+    textAlign: "center",
+    color: "blue",
+    fontSize: 16,
+    textDecorationLine: "underline",
   },
 });

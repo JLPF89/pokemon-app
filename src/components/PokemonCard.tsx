@@ -28,6 +28,7 @@ export default function PokemonCard({
 }) {
   const { borderColor, emoji } = getTypeDetails(type);
   const [modalVisible, setModalVisible] = useState(false);
+
   const handleClickEvolutions = () => {
     setModalVisible(true);
   };
@@ -58,9 +59,11 @@ export default function PokemonCard({
       <View>
         <Text>Weakness: {weakness.join(", ")}</Text>
       </View>
-      <View>
-        <Button onPress={() => handleClickEvolutions()} title="Evolutions" />
-      </View>
+      {evolutions && evolutions.length > 0 && (
+        <View>
+          <Button onPress={handleClickEvolutions} title="Evolutions" />
+        </View>
+      )}
       <EvolutionsModal
         evolutions={evolutions}
         modalVisible={modalVisible}
